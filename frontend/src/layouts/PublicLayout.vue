@@ -54,12 +54,15 @@ onMounted(async () => {
       <div class="container nav-content">
         <router-link to="/" class="logo">
           <img src="/logo.png" alt="Logo SMPN 1 Muara Kaman" class="logo-img" />
-          <span class="logo-text">SMPN 1 Muara Kaman</span>
+          <div class="logo-text-wrapper">
+             <div class="logo-title">SMPN 1 Muara Kaman</div>
+             <div class="logo-subtitle">Berakhlak Mulia, Cerdas & Berprestasi</div>
+          </div>
         </router-link>
 
         <button class="hamburger-btn" @click="toggleMenu" aria-label="Toggle Navigation">
-            <svg v-if="!isMenuOpen" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
-            <svg v-else xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+            <svg v-if="!isMenuOpen" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1f2937" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+            <svg v-else xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1f2937" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
         </button>
 
         <nav class="nav-links" :class="{ 'is-open': isMenuOpen }">
@@ -145,13 +148,14 @@ onMounted(async () => {
 
 <style scoped>
 .navbar {
-  background-color: var(--primary-navy);
-  color: var(--text-light);
-  padding: 1rem 0;
+  background-color: white;
+  color: #1f2937;
+  padding: 0.5rem 0;
   position: sticky;
   top: 0;
   z-index: 100;
-  box-shadow: var(--shadow-md);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+  border-top: 4px solid #15803d; /* UI GreenMetric style border */
 }
 
 .nav-content {
@@ -161,25 +165,35 @@ onMounted(async () => {
 }
 
 .logo {
-  font-size: 1.5rem;
-  font-weight: 700;
   display: flex;
   align-items: center;
   gap: 0.75rem;
   text-decoration: none;
-  color: var(--text-light);
+  color: #1f2937;
 }
 
 .logo-img {
-  height: 60px;
+  height: 56px;
   width: auto;
   object-fit: contain;
 }
 
-.logo-text {
-  background: linear-gradient(to right, var(--accent-amber), #fff);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+.logo-text-wrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+.logo-title {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: #15803d; /* Green color matching the UI */
+  line-height: 1.2;
+}
+
+.logo-subtitle {
+  font-size: 0.75rem;
+  color: #4b5563;
+  font-weight: 500;
 }
 
 .nav-links {
@@ -189,17 +203,19 @@ onMounted(async () => {
 }
 
 .nav-links a {
-  color: var(--text-light);
-  font-weight: 500;
+  color: #374151;
+  font-weight: 600;
+  font-size: 0.95rem;
   transition: var(--transition);
+  text-decoration: none;
 }
 
 .nav-links a:hover {
-  color: var(--accent-amber);
+  color: #15803d;
 }
 
 .text-amber {
-    color: var(--accent-amber) !important;
+    color: #15803d !important;
 }
 
 .dropdown {
@@ -208,28 +224,29 @@ onMounted(async () => {
 }
 
 .dropdown-title {
-    color: var(--text-light);
-    font-weight: 500;
+    color: #374151;
+    font-weight: 600;
+    font-size: 0.95rem;
     cursor: pointer;
     padding: 0.5rem 0;
     transition: var(--transition);
 }
 
 .dropdown-title:hover {
-    color: var(--accent-amber);
+    color: #15803d;
 }
 
 .dropdown-content {
     position: absolute;
-    background-color: var(--primary-navy-dark);
+    background-color: white;
+    border: 1px solid #e5e7eb;
     min-width: 250px;
-    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.5);
+    box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
     z-index: 101;
     border-radius: 0.5rem;
     overflow: hidden;
     top: 100%;
     left: 0;
-    /* Removed margin-top to prevent mouseleave gap issue */
 }
 
 /* Pseudo element to create an invisible bridge for mouse hover */
@@ -244,32 +261,33 @@ onMounted(async () => {
 }
 
 .dropdown-content a {
-    color: var(--text-light);
+    color: #4b5563;
     padding: 12px 16px;
     text-decoration: none;
     display: block;
-    border-bottom: 1px solid rgba(255,255,255,0.05);
+    border-bottom: 1px solid #f3f4f6;
     font-size: 0.95rem;
     text-align: left !important;
 }
 
 .dropdown-content a:hover {
-    background-color: var(--accent-amber);
-    color: var(--primary-navy-dark);
+    background-color: #f3f4f6;
+    color: #111827;
 }
 
 .btn-kiosk {
-  background-color: rgba(255, 255, 255, 0.1);
+  background-color: rgba(0, 0, 0, 0.05);
   padding: 0.5rem 1rem;
   border-radius: 0.5rem;
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  color: #1f2937;
 }
 
 .hamburger-btn {
     display: none;
     background: none;
     border: none;
-    color: white;
+    color: #1f2937;
     cursor: pointer;
     padding: 0.5rem;
 }
@@ -285,12 +303,13 @@ onMounted(async () => {
         top: 100%;
         left: 0;
         width: 100%;
-        background-color: var(--primary-navy-dark);
+        background-color: white;
         flex-direction: column;
         padding: 0;
-        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2);
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
         gap: 0;
         z-index: 99;
+        border-top: 1px solid #e5e7eb;
         
         max-height: 0;
         opacity: 0;
@@ -310,7 +329,7 @@ onMounted(async () => {
         width: 100%;
         text-align: left;
         padding: 1rem 1.5rem;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        border-bottom: 1px solid #f3f4f6;
         box-sizing: border-box;
     }
     
@@ -319,15 +338,17 @@ onMounted(async () => {
         justify-content: space-between;
         align-items: center;
         padding: 0;
+        color: #374151;
     }
     
     .dropdown-content {
         position: static;
         box-shadow: none;
-        background-color: rgba(0,0,0,0.2);
+        background-color: #f9fafb;
         margin-top: 1rem;
         border-radius: 0.5rem;
         width: 100%;
+        border: none;
     }
     
     .dropdown::after {
