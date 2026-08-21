@@ -513,13 +513,29 @@ onUnmounted(() => {
 }
 
 @media (max-width: 768px) {
+    .hero-text h1 { font-size: 2.25rem; }
+    .hero-text p { font-size: 1rem; margin-bottom: 1.5rem; }
+    .hero-slider, .hero { min-height: 60vh; height: 60vh; padding: 4rem 0; }
+    .slide-item { height: 100%; }
     .articles-grid { grid-template-columns: 1fr; }
     .fasilitas-grid { grid-template-columns: repeat(2, 1fr); }
-    .quick-grid { grid-template-columns: 1fr; }
-    .stats-grid { grid-template-columns: 1fr; }
+    .quick-grid { grid-template-columns: repeat(2, 1fr); gap: 1rem; }
+    .quick-card { padding: 1.5rem 0.5rem; }
+    .quick-icon { font-size: 2rem; }
+    .stats-grid { grid-template-columns: repeat(2, 1fr); gap: 1.5rem; }
+    .stat-number { font-size: 2rem; }
     .ekskul-grid { grid-template-columns: 1fr; }
     .sambutan-wrapper { flex-direction: column; text-align: center; }
     .sambutan-image-placeholder { height: 250px; }
+}
+
+@media (max-width: 480px) {
+    .hero-text h1 { font-size: 1.75rem; }
+    .hero-actions { flex-direction: column; width: 100%; }
+    .hero-actions a { width: 100%; }
+    .quick-grid { grid-template-columns: 1fr; }
+    .stats-grid { grid-template-columns: 1fr; }
+    .fasilitas-grid { grid-template-columns: 1fr; }
 }
 .article-card { overflow: hidden; display: flex; flex-direction: column; }
 .article-image { width: 100%; height: 200px; overflow: hidden; }
