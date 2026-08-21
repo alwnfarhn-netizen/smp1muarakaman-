@@ -1,6 +1,7 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import api from '../plugins/axios';
+import { assetUrl } from '../plugins/config';
 
 const footer = ref({
     info: 'SMP Negeri 1 Muara Kaman',
@@ -8,6 +9,8 @@ const footer = ref({
     contact: 'Jl. Contoh, Muara Kaman',
     map: ''
 });
+const schoolLogo = ref('');
+const schoolName = ref('SMPN 1 Muara Kaman');
 
 const isMenuOpen = ref(false);
 const activeDropdown = ref(null);
@@ -33,6 +36,8 @@ const toggleDropdown = (menuName) => {
 onMounted(async () => {
     try {
         const response = await api.get('/settings');
+        if (response.data.school_logo_path) schoolLogo.value = response.data.school_logo_path;
+        if (response.data.school_name) schoolName.value = response.data.school_name;
         if (response.data.footer_info) footer.value.info = response.data.footer_info;
         if (response.data.footer_contact) footer.value.contact = response.data.footer_contact;
         if (response.data.footer_map) footer.value.map = response.data.footer_map;
@@ -47,9 +52,10 @@ onMounted(async () => {
   <div class="public-layout">
     <header class="navbar">
       <div class="container nav-content">
-        <div class="logo">
-          <span class="text-gradient">SMPN 1</span> Muara Kaman
-        </div>
+        <router-link to="/" class="logo">
+          <img v-if="schoolLogo" :src="assetUrl(schoolLogo)" alt="Logo" class="logo-img" />
+          <span class="logo-text">{{ schoolName }}</span>
+        </router-link>
 
         <button class="hamburger-btn" @click="toggleMenu" aria-label="Toggle Navigation">
             <svg v-if="!isMenuOpen" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
@@ -157,6 +163,23 @@ onMounted(async () => {
 .logo {
   font-size: 1.5rem;
   font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  text-decoration: none;
+  color: var(--text-light);
+}
+
+.logo-img {
+  height: 40px;
+  width: auto;
+  object-fit: contain;
+}
+
+.logo-text {
+  background: linear-gradient(to right, var(--accent-amber), #fff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 .nav-links {
