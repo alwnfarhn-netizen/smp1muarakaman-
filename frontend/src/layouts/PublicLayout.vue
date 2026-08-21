@@ -173,7 +173,7 @@ onMounted(async () => {
 }
 
 .logo-img {
-  height: 56px;
+  height: 80px;
   width: auto;
   object-fit: contain;
 }
