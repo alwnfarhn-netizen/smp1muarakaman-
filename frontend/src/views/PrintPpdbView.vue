@@ -45,7 +45,7 @@ onMounted(() => {
 
     <div v-else class="print-card">
         <div class="print-header">
-            <img src="@/assets/logo.png" alt="Logo SMPN 1" class="logo" @error="$event.target.src='https://via.placeholder.com/60'" />
+            <img src="/favicon.svg" alt="Logo SMP" class="logo" @error="$event.target.src='https://via.placeholder.com/60'" />
             <div class="header-text">
                 <h2>KARTU BUKTI PENDAFTARAN PPDB</h2>
                 <h3>SMP NEGERI 1 MUARA KAMAN</h3>
