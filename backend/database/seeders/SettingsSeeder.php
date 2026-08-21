@@ -34,7 +34,7 @@ class SettingsSeeder extends Seeder
             ['key' => 'school_teacher_ratio', 'value' => '1:20'],
             ['key' => 'school_land_area',   'value' => '23850'],
             ['key' => 'contact_email',      'value' => 'info@smpn1muarakaman.sch.id'],
-            ['key' => 'ppdb_is_open',       'value' => 'false'],
+            ['key' => 'ppdb_is_open',       'value' => 'true'],
             ['key' => 'ppdb_year',          'value' => '2026/2027'],
             ['key' => 'fonnte_api_token',   'value' => ''],
             ['key' => 'google_maps_embed',  'value' => 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3989.8!2d116.7287!3d-0.1478!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2sSMPN+1+Muara+Kaman!5e0!3m2!1sid!2sid!4v1!5m2!1sid!2sid'],

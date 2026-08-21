@@ -15,36 +15,72 @@ const form = ref({
     parent_name: '',
     parent_phone: ''
 });
-const documentFile = ref(null);
+const documentFiles = ref({
+    skl: null,
+    kk: null,
+    akta: null,
+    ktp: null,
+    photo: null
+});
+const fileUrls = ref({
+    skl: null,
+    kk: null,
+    akta: null,
+    ktp: null,
+    photo: null
+});
 const loading = ref(false);
 const message = ref('');
 const messageType = ref('');
 const regNumber = ref('');
+const validationError = ref('');
 
 const nextStep = () => { 
+    validationError.value = '';
     if (step.value === 1) {
         if (!form.value.full_name || !form.value.nisn || !form.value.place_of_birth || !form.value.date_of_birth) {
-            alert('Mohon lengkapi semua data wajib (Nama, NISN, Tempat & Tanggal Lahir) sebelum melanjutkan.');
+            validationError.value = 'Mohon lengkapi semua data wajib (ditandai dengan *) sebelum melanjutkan.';
             return;
         }
     }
     if (step.value === 2) {
         if (!form.value.previous_school || !form.value.address || !form.value.parent_name || !form.value.parent_phone) {
-            alert('Mohon lengkapi data sekolah asal, alamat, dan data orang tua.');
+            validationError.value = 'Mohon lengkapi data sekolah asal, alamat, dan data orang tua (ditandai dengan *).';
             return;
         }
     }
     if (step.value < 3) step.value++; 
 };
-const prevStep = () => { if (step.value > 1) step.value--; };
+const prevStep = () => { 
+    validationError.value = '';
+    if (step.value > 1) step.value--; 
+};
 
-const handleFileUpload = (event) => {
+const handleFileUpload = (event, type) => {
     const file = event.target.files[0];
-    if (file && file.type === 'application/pdf') {
-        documentFile.value = file;
+    if (!file) return;
+
+    const isImage = type === 'photo' && ['image/jpeg', 'image/png', 'image/jpg'].includes(file.type);
+    const isPdf = type !== 'photo' && file.type === 'application/pdf';
+
+    if (isImage || isPdf) {
+        if (file.size > 2 * 1024 * 1024) {
+            alert('Ukuran file maksimal 2MB');
+            event.target.value = '';
+            documentFiles.value[type] = null;
+            if (fileUrls.value[type]) URL.revokeObjectURL(fileUrls.value[type]);
+            fileUrls.value[type] = null;
+        } else {
+            documentFiles.value[type] = file;
+            if (fileUrls.value[type]) URL.revokeObjectURL(fileUrls.value[type]);
+            fileUrls.value[type] = URL.createObjectURL(file);
+        }
     } else {
-        alert('File harus berupa PDF');
+        alert(type === 'photo' ? 'File harus berupa JPG/PNG' : 'File harus berupa PDF');
         event.target.value = '';
+        documentFiles.value[type] = null;
+        if (fileUrls.value[type]) URL.revokeObjectURL(fileUrls.value[type]);
+        fileUrls.value[type] = null;
     }
 };
 
@@ -56,9 +92,11 @@ const submitForm = async () => {
     for (const key in form.value) {
         formData.append(key, form.value[key]);
     }
-    if (documentFile.value) {
-        formData.append('document', documentFile.value);
-    }
+    if (documentFiles.value.skl) formData.append('document_skl', documentFiles.value.skl);
+    if (documentFiles.value.kk) formData.append('document_kk', documentFiles.value.kk);
+    if (documentFiles.value.akta) formData.append('document_akta', documentFiles.value.akta);
+    if (documentFiles.value.ktp) formData.append('document_ktp', documentFiles.value.ktp);
+    if (documentFiles.value.photo) formData.append('document_photo', documentFiles.value.photo);
 
     try {
         const response = await api.post('/ppdb/register', formData, {
@@ -114,24 +152,28 @@ const printPage = () => {
             <div v-if="message && messageType === 'error'" class="alert error">
                 {{ message }}
             </div>
+            
+            <div v-if="validationError" class="alert error">
+                {{ validationError }}
+            </div>
 
             <div v-if="step === 1" class="form-step">
                 <h4>Langkah 1: Data Diri Siswa</h4>
                 <div class="form-group">
-                    <label>Nama Lengkap</label>
+                    <label>Nama Lengkap <span class="text-danger">*</span></label>
                     <input type="text" v-model="form.full_name" required>
                 </div>
                 <div class="form-group">
-                    <label>NISN</label>
+                    <label>NISN <span class="text-danger">*</span></label>
                     <input type="text" v-model="form.nisn" required>
                 </div>
                 <div class="grid-2">
                     <div class="form-group">
-                        <label>Tempat Lahir</label>
+                        <label>Tempat Lahir <span class="text-danger">*</span></label>
                         <input type="text" v-model="form.place_of_birth" required>
                     </div>
                     <div class="form-group">
-                        <label>Tanggal Lahir</label>
+                        <label>Tanggal Lahir <span class="text-danger">*</span></label>
                         <input type="date" v-model="form.date_of_birth" required>
                     </div>
                 </div>
@@ -144,14 +186,14 @@ const printPage = () => {
                 <h4>Langkah 2: Data Tambahan & Orang Tua</h4>
                 <div class="grid-2">
                     <div class="form-group">
-                        <label>Jenis Kelamin</label>
+                        <label>Jenis Kelamin <span class="text-danger">*</span></label>
                         <select v-model="form.gender">
                             <option value="L">Laki-laki</option>
                             <option value="P">Perempuan</option>
                         </select>
                     </div>
                     <div class="form-group">
-                        <label>Agama</label>
+                        <label>Agama <span class="text-danger">*</span></label>
                         <select v-model="form.religion">
                             <option value="Islam">Islam</option>
                             <option value="Kristen">Kristen</option>
@@ -162,20 +204,20 @@ const printPage = () => {
                     </div>
                 </div>
                 <div class="form-group">
-                    <label>Asal Sekolah (SD/MI)</label>
+                    <label>Asal Sekolah (SD/MI) <span class="text-danger">*</span></label>
                     <input type="text" v-model="form.previous_school" required>
                 </div>
                 <div class="form-group">
-                    <label>Alamat Lengkap</label>
+                    <label>Alamat Lengkap <span class="text-danger">*</span></label>
                     <textarea v-model="form.address" rows="3" required></textarea>
                 </div>
                 <div class="grid-2">
                     <div class="form-group">
-                        <label>Nama Orang Tua / Wali</label>
+                        <label>Nama Orang Tua / Wali <span class="text-danger">*</span></label>
                         <input type="text" v-model="form.parent_name" required>
                     </div>
                     <div class="form-group">
-                        <label>No. HP / WhatsApp aktif</label>
+                        <label>No. HP / WhatsApp aktif <span class="text-danger">*</span></label>
                         <input type="text" v-model="form.parent_phone" required>
                     </div>
                 </div>
@@ -187,14 +229,51 @@ const printPage = () => {
 
             <div v-if="step === 3" class="form-step">
                 <h4>Langkah 3: Upload Berkas</h4>
-                <p class="mb-4 text-sm text-secondary">Silakan gabungkan semua berkas persyaratan (SKL, KK, Akta Kelahiran, dll) menjadi <strong>1 file PDF</strong> berukuran maksimal 5MB.</p>
+                <p class="mb-4 text-sm text-secondary">Silakan unggah dokumen persyaratan berikut (Maksimal 2MB per file).</p>
+                <div class="grid-2">
+                    <div class="form-group">
+                        <label>Surat Keterangan Lulus (PDF) <span class="text-danger">*</span></label>
+                        <input type="file" accept="application/pdf" @change="(e) => handleFileUpload(e, 'skl')" required>
+                        <div v-if="fileUrls.skl" class="file-preview">
+                            <span class="file-name">{{ documentFiles.skl.name }}</span>
+                            <a :href="fileUrls.skl" target="_blank" class="preview-link">🔍 Cek File</a>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Kartu Keluarga (PDF) <span class="text-danger">*</span></label>
+                        <input type="file" accept="application/pdf" @change="(e) => handleFileUpload(e, 'kk')" required>
+                        <div v-if="fileUrls.kk" class="file-preview">
+                            <span class="file-name">{{ documentFiles.kk.name }}</span>
+                            <a :href="fileUrls.kk" target="_blank" class="preview-link">🔍 Cek File</a>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Akta Kelahiran (PDF) <span class="text-danger">*</span></label>
+                        <input type="file" accept="application/pdf" @change="(e) => handleFileUpload(e, 'akta')" required>
+                        <div v-if="fileUrls.akta" class="file-preview">
+                            <span class="file-name">{{ documentFiles.akta.name }}</span>
+                            <a :href="fileUrls.akta" target="_blank" class="preview-link">🔍 Cek File</a>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>KTP Orang Tua/Wali (PDF) <span class="text-danger">*</span></label>
+                        <input type="file" accept="application/pdf" @change="(e) => handleFileUpload(e, 'ktp')" required>
+                        <div v-if="fileUrls.ktp" class="file-preview">
+                            <span class="file-name">{{ documentFiles.ktp.name }}</span>
+                            <a :href="fileUrls.ktp" target="_blank" class="preview-link">🔍 Cek File</a>
+                        </div>
+                    </div>
+                </div>
                 <div class="form-group">
-                    <label>Upload File PDF</label>
-                    <input type="file" accept="application/pdf" @change="handleFileUpload" required>
+                    <label>Pas Foto 3x4 (JPG/PNG) <span class="text-danger">*</span></label>
+                    <input type="file" accept="image/jpeg,image/png,image/jpg" @change="(e) => handleFileUpload(e, 'photo')" required>
+                    <div v-if="fileUrls.photo" class="file-preview image-preview">
+                        <img :src="fileUrls.photo" alt="Preview Foto">
+                    </div>
                 </div>
                 <div class="form-actions between">
                     <button type="button" class="btn-secondary" @click="prevStep">&larr; Kembali</button>
-                    <button type="button" class="btn-primary" @click="submitForm" :disabled="loading || !documentFile">
+                    <button type="button" class="btn-primary" @click="submitForm" :disabled="loading || !documentFiles.skl || !documentFiles.kk || !documentFiles.akta || !documentFiles.ktp || !documentFiles.photo">
                         {{ loading ? 'Mengirim...' : 'Kirim Pendaftaran' }}
                     </button>
                 </div>
@@ -376,6 +455,57 @@ const printPage = () => {
 .text-center { text-align: center; }
 .text-sm { font-size: 0.875rem; }
 .text-secondary { color: var(--text-secondary); }
+.text-danger { color: #ff4d4f; }
+
+.file-preview {
+    margin-top: 0.5rem;
+    padding: 0.75rem;
+    background: #f0fdf4;
+    border: 1px solid #bbf7d0;
+    border-radius: 0.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.875rem;
+    animation: fadeIn 0.3s ease;
+}
+.file-name {
+    color: #166534;
+    font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 65%;
+}
+.preview-link {
+    color: #047857;
+    text-decoration: none;
+    font-weight: 600;
+    background: white;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+    border: 1px solid #86efac;
+    transition: var(--transition);
+}
+.preview-link:hover {
+    background: #dcfce7;
+}
+.image-preview {
+    justify-content: center;
+    padding: 1rem;
+    background: #f9fafb;
+    border-color: #e5e7eb;
+}
+.image-preview img {
+    max-height: 150px;
+    border-radius: 0.5rem;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-5px); }
+    to { opacity: 1; transform: translateY(0); }
+}
 
 .reg-card {
     background: rgba(255, 193, 7, 0.1);

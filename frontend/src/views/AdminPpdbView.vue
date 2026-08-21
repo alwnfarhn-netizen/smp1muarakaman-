@@ -79,8 +79,14 @@ const getStatusBadgeClass = (status) => {
                         <td>{{ reg.full_name }}</td>
                         <td>{{ reg.previous_school }}</td>
                         <td>
-                            <a v-if="reg.document_path" :href="assetUrl('storage/' + reg.document_path)" target="_blank" class="link-doc">Lihat PDF</a>
-                            <span v-else>—</span>
+                            <div class="doc-links">
+                                <a v-if="reg.document_skl" :href="assetUrl('storage/' + reg.document_skl)" target="_blank" class="link-doc">SKL</a>
+                                <a v-if="reg.document_kk" :href="assetUrl('storage/' + reg.document_kk)" target="_blank" class="link-doc">KK</a>
+                                <a v-if="reg.document_akta" :href="assetUrl('storage/' + reg.document_akta)" target="_blank" class="link-doc">Akta</a>
+                                <a v-if="reg.document_ktp" :href="assetUrl('storage/' + reg.document_ktp)" target="_blank" class="link-doc">KTP</a>
+                                <a v-if="reg.document_photo" :href="assetUrl('storage/' + reg.document_photo)" target="_blank" class="link-doc">Foto</a>
+                                <span v-if="!reg.document_skl && !reg.document_kk && !reg.document_akta && !reg.document_ktp && !reg.document_photo">—</span>
+                            </div>
                         </td>
                         <td>
                             <span :class="['badge', getStatusBadgeClass(reg.status)]">{{ reg.status.toUpperCase() }}</span>
@@ -112,7 +118,8 @@ const getStatusBadgeClass = (status) => {
 .badge-success { background: #dcfce7; color: #166534; }
 .badge-danger { background: #fee2e2; color: #991b1b; }
 .badge-secondary { background: #f3f4f6; color: #374151; }
-.link-doc { color: #2563eb; text-decoration: underline; }
+.doc-links { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+.link-doc { color: #2563eb; text-decoration: underline; font-size: 0.875rem; }
 .action-buttons { display: flex; gap: 0.5rem; }
 .btn-sm { padding: 0.375rem 0.75rem; font-size: 0.75rem; border-radius: 0.375rem; color: white; border: none; cursor: pointer; font-weight: 500;}
 .btn-info { background-color: #3b82f6; }

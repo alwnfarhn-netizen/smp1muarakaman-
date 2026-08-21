@@ -28,13 +28,19 @@ class PpdbController extends Controller
             'address' => 'required|string',
             'parent_name' => 'required|string',
             'parent_phone' => 'required|string',
-            'document' => 'required|file|mimes:pdf|max:5120' // max 5MB PDF
+            'document_skl' => 'required|file|mimes:pdf|max:2048', // max 2MB
+            'document_kk' => 'required|file|mimes:pdf|max:2048',
+            'document_akta' => 'required|file|mimes:pdf|max:2048',
+            'document_ktp' => 'required|file|mimes:pdf|max:2048',
+            'document_photo' => 'required|file|mimes:jpeg,png,jpg|max:2048'
         ]);
 
-        if ($request->hasFile('document')) {
-            $path = $request->file('document')->store('ppdb_documents', 'public');
-            $validated['document_path'] = $path;
-            unset($validated['document']);
+        $files = ['document_skl', 'document_kk', 'document_akta', 'document_ktp', 'document_photo'];
+        foreach ($files as $fileKey) {
+            if ($request->hasFile($fileKey)) {
+                $path = $request->file($fileKey)->store('ppdb_documents', 'public');
+                $validated[$fileKey] = $path;
+            }
         }
 
         // Generate Registration Number

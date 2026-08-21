@@ -24,7 +24,11 @@ return new class extends Migration
             $table->text('address');
             $table->string('parent_name');
             $table->string('parent_phone');
-            $table->string('document_path')->nullable();
+            $table->string('document_skl')->nullable();
+            $table->string('document_kk')->nullable();
+            $table->string('document_akta')->nullable();
+            $table->string('document_ktp')->nullable();
+            $table->string('document_photo')->nullable();
             $table->enum('status', ['pending', 'verified', 'accepted', 'rejected'])->default('pending');
             $table->text('notes')->nullable();
             $table->timestamps();
