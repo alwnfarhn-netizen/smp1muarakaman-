@@ -53,8 +53,8 @@ onMounted(async () => {
     <header class="navbar">
       <div class="container nav-content">
         <router-link to="/" class="logo">
-          <img v-if="schoolLogo" :src="assetUrl(schoolLogo)" alt="Logo" class="logo-img" />
-          <span class="logo-text">{{ schoolName }}</span>
+          <img src="/logo.jpg" alt="Logo SMPN 1 Muara Kaman" class="logo-img" />
+          <span class="logo-text">SMPN 1 Muara Kaman</span>
         </router-link>
 
         <button class="hamburger-btn" @click="toggleMenu" aria-label="Toggle Navigation">

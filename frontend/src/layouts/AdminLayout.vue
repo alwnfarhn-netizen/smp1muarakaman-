@@ -5,7 +5,7 @@
       <div class="navbar-container">
         <!-- Logo -->
         <div class="logo-area">
-          <div class="logo-icon"></div>
+          <img src="/logo.jpg" alt="Logo" class="admin-logo-img" />
           <span class="logo-text">ADMIN<span class="text-primary">-SMPN1</span></span>
         </div>
 
@@ -129,12 +129,10 @@ const handleLogout = async () => {
   gap: 0.75rem;
 }
 
-.logo-icon {
-  width: 32px;
+.admin-logo-img {
   height: 32px;
-  background-color: var(--accent-amber);
-  border-radius: 4px;
-  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+  width: auto;
+  object-fit: contain;
 }
 
 .logo-text {
