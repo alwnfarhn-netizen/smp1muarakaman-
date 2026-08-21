@@ -53,7 +53,7 @@ onMounted(async () => {
     <header class="navbar">
       <div class="container nav-content">
         <router-link to="/" class="logo">
-          <img src="/logo.jpg" alt="Logo SMPN 1 Muara Kaman" class="logo-img" />
+          <img src="/logo.png" alt="Logo SMPN 1 Muara Kaman" class="logo-img" />
           <span class="logo-text">SMPN 1 Muara Kaman</span>
         </router-link>
 

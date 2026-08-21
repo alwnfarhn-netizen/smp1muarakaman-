@@ -5,7 +5,7 @@
       <div class="navbar-container">
         <!-- Logo -->
         <div class="logo-area">
-          <img src="/logo.jpg" alt="Logo" class="admin-logo-img" />
+          <img src="/logo.png" alt="Logo" class="admin-logo-img" />
           <span class="logo-text">ADMIN<span class="text-primary">-SMPN1</span></span>
         </div>
 
