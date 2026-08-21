@@ -38,6 +38,15 @@ class SettingsSeeder extends Seeder
             ['key' => 'ppdb_year',          'value' => '2026/2027'],
             ['key' => 'fonnte_api_token',   'value' => ''],
             ['key' => 'google_maps_embed',  'value' => 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3989.8!2d116.7287!3d-0.1478!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2sSMPN+1+Muara+Kaman!5e0!3m2!1sid!2sid!4v1!5m2!1sid!2sid'],
+            ['key' => 'footer_info',        'value' => "SMP Negeri 1 Muara Kaman didirikan pada 7 November 1983. Terakreditasi B.\nMisi: Melahirkan generasi yang beriman, berakhlak mulia, cerdas, kreatif, berprestasi, berbudaya, dan berwawasan global."],
+            ['key' => 'footer_contact',     'value' => "<p><strong>Alamat:</strong> Jl. Mulawarman RT.15 No.03<br>Desa Muara Kaman Ulu, Kec. Muara Kaman<br>Kab. Kutai Kartanegara, Kaltim 75553</p><p><strong>Telepon:</strong> 082250169235<br><strong>Email:</strong> ryantiryanti184@gmail.com</p>"],
+            ['key' => 'footer_map',         'value' => '<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3989.8!2d116.7287!3d-0.1478!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2sSMPN+1+Muara+Kaman!5e0!3m2!1sid!2sid!4v1!5m2!1sid!2sid" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"></iframe>'],
+            ['key' => 'footer_links',       'value' => json_encode([
+                ['title' => 'Visi & Misi', 'url' => '/profil/visi-misi'],
+                ['title' => 'Info PPDB Online', 'url' => '/ppdb'],
+                ['title' => 'Direktori Guru', 'url' => '/profil/tenaga-kependidikan'],
+                ['title' => 'Kiosk Absensi', 'url' => '/kiosk']
+            ])],
         ];
 
         foreach ($settings as $setting) {
