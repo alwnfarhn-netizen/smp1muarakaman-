@@ -130,7 +130,7 @@ const handleLogout = async () => {
 }
 
 .admin-logo-img {
-  height: 32px;
+  height: 48px;
   width: auto;
   object-fit: contain;
 }

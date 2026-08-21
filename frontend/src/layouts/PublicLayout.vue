@@ -171,7 +171,7 @@ onMounted(async () => {
 }
 
 .logo-img {
-  height: 40px;
+  height: 60px;
   width: auto;
   object-fit: contain;
 }
