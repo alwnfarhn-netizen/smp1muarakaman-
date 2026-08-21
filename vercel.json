@@ -1,12 +1,17 @@
 {
-  "installCommand": "echo 'Skipping root install'",
-  "buildCommand": "cd frontend && npm install && npm run build",
-  "outputDirectory": "frontend/dist",
-  "cleanUrls": true,
-  "rewrites": [
-    {
-      "source": "/(.*)",
-      "destination": "/index.html"
-    }
-  ]
+    "services": {
+        "frontend": {
+            "root": "frontend",
+            "framework": "vite"
+        }
+    },
+    "rewrites": [
+        {
+            "source": "/(.*)",
+            "destination": {
+                "type": "service",
+                "service": "frontend"
+            }
+        }
+    ]
 }
